@@ -1,12 +1,18 @@
 <script lang="ts">
   import { formatOxc, formatPrettier } from "$lib/formatter";
 
-  let source = $state("");
-  const formatPromise = $derived(Promise.all([formatOxc(source), formatPrettier(source)]));
+  let fileName = $state("example.ts");
+  let source = $state("let a:number=1");
+  const formatPromise = $derived(
+    Promise.all([formatOxc(source, fileName), formatPrettier(source, fileName)]),
+  );
 </script>
 
 <div class="main">
-  <textarea bind:value={source}></textarea>
+  <div>
+    <input type="text" bind:value={fileName} />
+    <textarea bind:value={source}></textarea>
+  </div>
 
   {#await formatPromise}
     <p>Formatting...</p>
@@ -41,7 +47,7 @@
 
   textarea {
     box-sizing: border-box;
-    height: 100%;
+    min-height: 50vh;
     resize: vertical;
   }
 

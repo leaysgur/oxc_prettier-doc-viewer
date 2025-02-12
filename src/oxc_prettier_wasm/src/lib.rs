@@ -19,14 +19,14 @@ pub struct ParseReturn {
 }
 
 #[wasm_bindgen(js_name = format)]
-pub fn format(input_text: &str) -> ParseReturn {
+pub fn format(source: &str, file_name: &str) -> ParseReturn {
     let allocator = Allocator::default();
 
-    let parser =
-        Parser::new(&allocator, input_text, SourceType::default()).with_options(ParseOptions {
-            preserve_parens: false,
-            ..ParseOptions::default()
-        });
+    let source_type = SourceType::from_path(file_name).unwrap_or_default();
+    let parser = Parser::new(&allocator, source, source_type).with_options(ParseOptions {
+        preserve_parens: false,
+        ..ParseOptions::default()
+    });
     let parsed = parser.parse();
 
     let oxc_prettier = Prettier::new(&allocator, PrettierOptions::default());
