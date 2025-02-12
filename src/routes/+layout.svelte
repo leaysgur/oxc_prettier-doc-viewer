@@ -17,8 +17,8 @@
     <p>Loading...</p>
   {:then}
     {@render children()}
-  {:catch error}
-    <p>{error.message}</p>
+  {:catch err}
+    <p>{err.message}</p>
   {/await}
 </main>
 

@@ -9,7 +9,7 @@
   <textarea bind:value={source}></textarea>
 
   {#await formatPromise}
-    <p>...</p>
+    <p>Formatting...</p>
   {:then [oxc, prettier]}
     <div>
       {@render result("Doc AST", [oxc.docAst, prettier.docAst])}
@@ -42,6 +42,7 @@
   textarea {
     box-sizing: border-box;
     height: 100%;
+    resize: vertical;
   }
 
   pre {
