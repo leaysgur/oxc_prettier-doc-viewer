@@ -9,7 +9,7 @@
 </script>
 
 <div class="main">
-  <div>
+  <div class="input">
     <input type="text" bind:value={fileName} />
     <textarea bind:value={source}></textarea>
   </div>
@@ -40,9 +40,14 @@
 <style>
   .main {
     display: grid;
-    grid-template-columns: 200px 1fr;
+    grid-template-columns: 20% 1fr;
     gap: 0.5rem;
     align-items: start;
+  }
+
+  .input {
+    position: sticky;
+    top: 0;
   }
 
   textarea {
@@ -59,10 +64,10 @@
     border: 1px solid var(--color);
 
     &.oxc {
-      --color: #a00;
+      --color: #a8b1ff;
     }
     &.prettier {
-      --color: #0a0;
+      --color: #f8bc45;
     }
 
     &::before {
@@ -71,6 +76,7 @@
       top: 0;
       right: 0;
       background-color: var(--color);
+      color: initial;
       padding: 0 0.5rem;
     }
   }
