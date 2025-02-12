@@ -8,7 +8,7 @@ publish = false
 crate-type = ["cdylib"]
 
 [dependencies]
-oxc          = { path = "../../../oxc/crates/oxc", features = ["serialize"] }
+oxc          = { path = "../../../oxc/crates/oxc" }
 oxc_prettier = { path = "../../../oxc/crates/oxc_prettier" }
 wasm-bindgen = "0.2.100"
 tsify        = "0.4.5"
