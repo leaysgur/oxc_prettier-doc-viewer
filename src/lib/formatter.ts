@@ -5,7 +5,7 @@ import pluginESTree from "prettier/plugins/estree";
 import pluginBabel from "prettier/plugins/babel";
 import { createHighlighter } from "shiki";
 
-// NOTE: May consider fine grained bundling in the future
+// NOTE: May consider fine grained bundling in the future for deployment
 const hi = async ([docAst_, doc_, formatted_]: [unknown, string, string], isTS: boolean) => {
   const theme = "catppuccin-macchiato";
   const lang = isTS ? "typescript" : "javascript";
@@ -61,7 +61,10 @@ export const formatPrettier: FormatFn = async (source, fileName) => {
   try {
     const docAst = await PrettierDebug.printToDoc(source, prettierOptions);
     const doc = await PrettierDebug.formatDoc(docAst, prettierOptions);
-    const { formatted } = await PrettierDebug.printDocToString(docAst, prettierOptions);
+
+    // Don't reuse `docAst`, `formatDoc` mutates it!
+    const docAstForFormatted = await PrettierDebug.printToDoc(source, prettierOptions);
+    const { formatted } = await PrettierDebug.printDocToString(docAstForFormatted, prettierOptions);
 
     const highlighted = await hi([docAst, doc, formatted], isTS);
     return highlighted;
