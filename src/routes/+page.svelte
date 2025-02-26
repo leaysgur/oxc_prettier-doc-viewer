@@ -6,6 +6,23 @@
   const formatPromise = $derived(
     Promise.all([formatOxc(source, fileName), formatPrettier(source, fileName)]),
   );
+
+  // `detail` element cannot persist its state...
+  let openStates: Record<string, boolean> = $state({
+    "Doc AST": false,
+    Doc: true,
+    Formatted: true,
+  });
+
+  const copyOnClick = (node: HTMLDivElement) => {
+    node.style.cursor = "pointer";
+    node.title = "Click to copy";
+
+    node.addEventListener("click", () => {
+      const code = node.textContent ?? "";
+      navigator.clipboard.writeText(code);
+    });
+  };
 </script>
 
 <div class="main">
@@ -28,13 +45,24 @@
 </div>
 
 {#snippet result(label: string, [oxc, prettier]: [string, string])}
-  <details open>
-    <summary>{label}</summary>
-    <section>
-      <div class="res oxc" data-label="oxc">{@html oxc}</div>
-      <div class="res prettier" data-label="prettier@3.5.0">{@html prettier}</div>
-    </section>
-  </details>
+  {@const isOpen = openStates[label]}
+
+  <section>
+    <a
+      href="."
+      onclick={(ev) => {
+        ev.preventDefault();
+        openStates[label] = !openStates[label];
+      }}>[{isOpen ? "↓" : "→"}]</a
+    >
+    <h3>{label}</h3>
+    {#if isOpen}
+      <div class="col2">
+        <div class="res oxc" data-label="oxc@local" use:copyOnClick>{@html oxc}</div>
+        <div class="res prettier" data-label="prettier@3.5.0" use:copyOnClick>{@html prettier}</div>
+      </div>
+    {/if}
+  </section>
 {/snippet}
 
 <style>
@@ -93,7 +121,12 @@
     gap: 0.5rem;
   }
 
-  section {
+  h3 {
+    margin: 0;
+    display: inline;
+  }
+
+  .col2 {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 0.5rem;
