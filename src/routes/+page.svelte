@@ -17,7 +17,7 @@
   {#await formatPromise}
     <p>Formatting...</p>
   {:then [oxc, prettier]}
-    <div>
+    <div class="output">
       {@render result("Doc AST", [oxc.docAst, prettier.docAst])}
       {@render result("Doc", [oxc.doc, prettier.doc])}
       {@render result("Formatted", [oxc.formatted, prettier.formatted])}
@@ -31,8 +31,8 @@
   <details open>
     <summary>{label}</summary>
     <section>
-      <pre class="oxc" data-label="oxc">{oxc}</pre>
-      <pre class="prettier" data-label="prettier@3.5.0">{prettier}</pre>
+      <div class="res oxc" data-label="oxc">{@html oxc}</div>
+      <div class="res prettier" data-label="prettier@3.5.0">{@html prettier}</div>
     </section>
   </details>
 {/snippet}
@@ -48,6 +48,8 @@
   .input {
     position: sticky;
     top: 0;
+    display: grid;
+    gap: 0.5rem;
   }
 
   textarea {
@@ -56,12 +58,12 @@
     resize: vertical;
   }
 
-  pre {
+  .res {
     position: relative;
-    padding: 0.5rem;
     overflow-x: auto;
     font-size: 0.7rem;
     border: 1px solid var(--color);
+    min-height: 1rem;
 
     &.oxc {
       --color: #a8b1ff;
@@ -79,9 +81,14 @@
       color: initial;
       padding: 0 0.5rem;
     }
+
+    :global(pre) {
+      height: 100%;
+      margin: 0;
+    }
   }
 
-  div {
+  .output {
     display: grid;
     gap: 0.5rem;
   }
